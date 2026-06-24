@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>오늘의 파스타 · Pasta Recipes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,600&family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --semolina: #f4e8c9;
+  --semolina-deep: #ecdcb4;
+  --cream: #fbf6ea;
+  --ink: #2a2017;
+  --ink-soft: #6a5c47;
+  --tomato: #c23b22;
+  --tomato-deep: #9e2f1a;
+  --basil: #5a6b36;
+  --line: #d9c599;
+  --shadow: rgba(60, 44, 20, 0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--semolina); color: var(--ink); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.hero {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(194, 59, 34, 0.07), transparent 40%),
+    radial-gradient(circle at 88% 12%, rgba(90, 107, 54, 0.08), transparent 38%),
+    var(--semolina-deep);
+  border-bottom: 2px solid var(--line); padding: 4.5rem 1.5rem 3rem;
+}
+.hero-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+.eyebrow {
+  font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--tomato-deep); font-weight: 600; margin-bottom: 0.6rem;
+}
+.hero h1 {
+  font-family: "Noto Serif KR", serif; font-weight: 700;
+  font-size: clamp(2.6rem, 7vw, 4.2rem); line-height: 1.05; letter-spacing: -0.01em;
+}
+.hero h1 .accent { font-family: "Fraunces", serif; font-style: italic; font-weight: 600; color: var(--tomato); }
+.lede { margin: 1rem auto 2rem; max-width: 32rem; color: var(--ink-soft); font-size: 1.02rem; }
+.searchbar {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: var(--cream); border: 1.5px solid var(--line); border-radius: 999px;
+  padding: 0.7rem 1.1rem; max-width: 30rem; margin: 0 auto; box-shadow: 0 4px 18px var(--shadow);
+}
+.search-icon { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: var(--ink-soft); stroke-width: 2; stroke-linecap: round; }
+.searchbar input { border: none; background: transparent; outline: none; flex: 1; font-size: 0.98rem; color: var(--ink); font-family: inherit; }
+.clear-btn { border: none; background: var(--semolina-deep); color: var(--ink-soft); width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; line-height: 1; flex-shrink: 0; }
+.clear-btn:hover { background: var(--line); }
+.container { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+.filters { display: flex; flex-wrap: wrap; gap: 1.8rem; padding-bottom: 1.8rem; border-bottom: 1px dashed var(--line); }
+.filter-group { flex: 1; min-width: 240px; }
+.filter-label { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; margin-bottom: 0.7rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  border: 1.5px solid var(--line); background: var(--cream); color: var(--ink);
+  border-radius: 999px; padding: 0.4rem 0.9rem; font-size: 0.9rem; font-family: inherit;
+  cursor: pointer; transition: all 0.15s ease;
+}
+.chip:hover { border-color: var(--tomato); }
+.chip.active { background: var(--tomato); border-color: var(--tomato); color: #fff; }
+.chip .chip-icon { width: 18px; height: 18px; }
+.result-count { margin: 1.8rem 0 1.2rem; font-size: 0.9rem; color: var(--ink-soft); }
+.result-count b { color: var(--tomato-deep); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+.card {
+  background: var(--cream); border: 1.5px solid var(--line); border-radius: 14px;
+  padding: 1.3rem 1.3rem 1.1rem; cursor: pointer; position: relative;
+  transition: transform 0.16s ease, box-shadow 0.16s ease; text-align: left; font-family: inherit; width: 100%;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px var(--shadow); }
+.card-it { font-family: "Fraunces", serif; font-style: italic; color: var(--tomato); font-size: 0.92rem; margin-bottom: 0.15rem; }
+.card-name { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 1.25rem; line-height: 1.25; margin-bottom: 0.6rem; }
+.card-summary { font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; font-size: 0.8rem; color: var(--ink-soft); padding-top: 0.8rem; border-top: 1px dashed var(--line); }
+.card-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+.badge { position: absolute; top: 1.1rem; right: 1.1rem; background: var(--basil); color: #fff; font-size: 0.72rem; padding: 0.18rem 0.55rem; border-radius: 6px; }
+.empty { text-align: center; color: var(--ink-soft); padding: 3rem 1rem; font-size: 0.98rem; }
+.modal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
+.modal[hidden] { display: none; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(42, 32, 23, 0.5); backdrop-filter: blur(2px); }
+.modal-card {
+  position: relative; background: var(--cream); border: 1.5px solid var(--line); border-radius: 16px;
+  max-width: 560px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 2rem 1.8rem;
+  box-shadow: 0 20px 60px rgba(42, 32, 23, 0.3);
+}
+.modal-close { position: absolute; top: 1rem; right: 1rem; border: none; background: var(--semolina-deep); color: var(--ink); width: 32px; height: 32px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.modal-close:hover { background: var(--line); }
+.modal-it { font-family: "Fraunces", serif; font-style: italic; color: var(--tomato); font-size: 1.05rem; }
+.modal-title { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 1.9rem; line-height: 1.15; margin: 0.1rem 0 0.5rem; }
+.modal-summary { color: var(--ink-soft); margin-bottom: 1rem; }
+.modal-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.6rem; }
+.meta-pill { background: var(--semolina); border: 1px solid var(--line); border-radius: 8px; padding: 0.3rem 0.7rem; font-size: 0.82rem; }
+.section-head { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 1.1rem; margin: 1.4rem 0 0.7rem; display: flex; align-items: center; gap: 0.5rem; }
+.section-head::before { content: ""; width: 22px; height: 2px; background: var(--tomato); }
+.ingredients { list-style: none; display: grid; gap: 0.35rem; }
+.ingredients li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.3rem 0; border-bottom: 1px dotted var(--line); font-size: 0.92rem; }
+.ingredients .amount { color: var(--ink-soft); white-space: nowrap; }
+.steps { list-style: none; counter-reset: step; display: grid; gap: 0.8rem; }
+.steps li { display: flex; gap: 0.8rem; font-size: 0.94rem; }
+.steps li::before {
+  counter-increment: step; content: counter(step); flex-shrink: 0; width: 26px; height: 26px;
+  background: var(--tomato); color: #fff; border-radius: 50%; font-family: "Fraunces", serif; font-style: italic;
+  display: flex; align-items: center; justify-content: center; font-size: 0.88rem;
+}
+.tip { margin-top: 1.4rem; background: rgba(90, 107, 54, 0.1); border-left: 3px solid var(--basil); border-radius: 0 8px 8px 0; padding: 0.8rem 1rem; font-size: 0.9rem; color: var(--ink); }
+.tip b { color: var(--basil); }
+.footer { text-align: center; padding: 2rem 1rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; }
+:focus-visible { outline: 3px solid var(--tomato); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 540px) { .hero { padding: 3rem 1.2rem 2.2rem; } .modal-card { padding: 1.6rem 1.2rem; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">집에서 만드는 정통 파스타</p>
+    <h1>오늘의 <span class="accent">Pasta</span></h1>
+    <p class="lede">소스 계열과 면 종류로 골라 보세요. 재료부터 순서, 핵심 팁까지 한 장에 담았습니다.</p>
+    <div class="searchbar">
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+      <input id="search" type="search" placeholder="재료·이름으로 검색 (예: 마늘, 까르보나라, 매움)" autocomplete="off" />
+      <button id="clear-search" class="clear-btn" hidden aria-label="검색어 지우기">×</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="filters" aria-label="필터">
+    <div class="filter-group">
+      <h2 class="filter-label">소스 종류</h2>
+      <div id="type-filters" class="chips"></div>
+    </div>
+    <div class="filter-group">
+      <h2 class="filter-label">면 종류</h2>
+      <div id="noodle-filters" class="chips"></div>
+    </div>
+  </section>
+
+  <p id="result-count" class="result-count"></p>
+  <section id="recipe-grid" class="grid" aria-live="polite"></section>
+  <p id="empty-state" class="empty" hidden>조건에 맞는 파스타가 없어요. 필터를 줄이거나 검색어를 바꿔 보세요.</p>
+</main>
+
+<div id="modal" class="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" data-close aria-label="닫기">×</button>
+    <div id="modal-body"></div>
+  </article>
+</div>
+
+<footer class="footer">
+  <p>파스타 레시피 토이 프로젝트 · 서버 없이 도는 단일 HTML 버전</p>
+</footer>
+
+<script>
+// ===== 레시피 데이터 (이 배열에 객체를 추가하면 검색·필터에 자동 반영) =====
+const RECIPES = [
+  { id: "aglio-olio", name: "알리오 올리오", nameIt: "Aglio e Olio", type: "오일", noodle: "스파게티", difficulty: "쉬움", time: 15, servings: 1,
+    summary: "마늘과 올리브유, 페페론치노만으로 완성하는 가장 기본이자 가장 어려운 파스타.",
+    ingredients: [
+      { name: "스파게티", amount: "100g" }, { name: "마늘", amount: "4~5쪽 (편썰기)" }, { name: "엑스트라버진 올리브유", amount: "4큰술" },
+      { name: "페페론치노", amount: "2~3개 (또는 페페론치노 가루 약간)" }, { name: "파슬리", amount: "약간 (다지기)" },
+      { name: "면 삶은 물", amount: "1국자" }, { name: "소금", amount: "면수용 1큰술" } ],
+    steps: [
+      "넉넉한 물에 소금을 풀고 스파게티를 포장지 표기보다 1분 짧게 삶는다.",
+      "차가운 팬에 올리브유와 편썬 마늘, 페페론치노를 넣고 약불에서 천천히 마늘이 옅은 금색이 될 때까지 익힌다.",
+      "면 삶은 물 1국자를 팬에 넣고 흔들어 기름과 물을 섞어 유화시킨다.",
+      "삶은 면을 팬에 옮기고 센 불에서 30초~1분간 빠르게 버무린다.",
+      "불을 끄고 파슬리를 넣어 마무리한 뒤 접시에 담는다." ],
+    tip: "마늘을 태우면 쓴맛이 나니 반드시 약불에서. 면수의 전분이 소스를 걸쭉하게 만들어 주는 핵심이다.",
+    tags: ["기본", "비건 가능", "빠른요리"] },
+
+  { id: "carbonara", name: "정통 까르보나라", nameIt: "Carbonara", type: "크림", noodle: "스파게티", difficulty: "보통", time: 20, servings: 1,
+    summary: "생크림 없이 달걀노른자와 치즈, 관찰레만으로 만드는 정통 로마식 까르보나라.",
+    ingredients: [
+      { name: "스파게티", amount: "100g" }, { name: "관찰레 (또는 판체타·베이컨)", amount: "60g" }, { name: "달걀노른자", amount: "2개" },
+      { name: "페코리노 로마노 (또는 파르미지아노)", amount: "30g (강판에)" }, { name: "통후추", amount: "넉넉히" }, { name: "면 삶은 물", amount: "2~3큰술" } ],
+    steps: [
+      "관찰레를 1cm 폭으로 썰어 기름 없는 팬에 약불로 바삭하게 굽고 기름은 남겨 둔다.",
+      "볼에 달걀노른자, 강판에 간 치즈, 통후추를 넣고 되직하게 섞는다.",
+      "스파게티를 소금물에 알덴테로 삶는다.",
+      "삶은 면을 관찰레 팬에 넣고 불을 끈 뒤 면 삶은 물을 조금 넣어 온도를 낮춘다.",
+      "달걀 혼합물을 부어 빠르게 버무린다. 열이 너무 높으면 달걀이 익어 덩어리지므로 잔열로만 익힌다.",
+      "농도가 되직하면 면수로 조절하고 후추를 더 갈아 마무리한다." ],
+    tip: "성공의 관건은 온도. 팬을 불에서 내린 뒤 달걀을 넣어야 부드러운 크림 질감이 나온다.",
+    tags: ["로마식", "달걀", "치즈"] },
+
+  { id: "carbonara-cream", name: "크림 까르보나라", nameIt: "Carbonara alla Panna", type: "크림", noodle: "스파게티", difficulty: "쉬움", time: 20, servings: 2,
+    summary: "생크림을 더해 부드럽고 진하게 즐기는, 한국에서 익숙한 스타일의 크림 까르보나라.",
+    ingredients: [
+      { name: "스파게티", amount: "180g" }, { name: "베이컨 (또는 관찰레)", amount: "60g" }, { name: "생크림", amount: "200ml" },
+      { name: "달걀노른자", amount: "1개" }, { name: "파르미지아노", amount: "40g (강판에)" }, { name: "양파", amount: "1/4개 (다지기, 선택)" },
+      { name: "올리브유", amount: "1큰술" }, { name: "통후추·소금", amount: "약간" } ],
+    steps: [
+      "스파게티를 소금물에 알덴테로 삶고 면수를 조금 남긴다.",
+      "팬에 올리브유를 두르고 베이컨(과 양파)을 중불에서 노릇하게 볶는다.",
+      "생크림을 붓고 약불에서 1~2분 살짝 졸여 농도를 낸다.",
+      "불을 약하게 줄인 뒤 삶은 면을 넣어 버무리고, 되직하면 면수로 농도를 맞춘다.",
+      "불을 끄고 달걀노른자와 파르미지아노를 넣어 빠르게 섞는다.",
+      "통후추를 갈고 소금으로 간을 맞춰 마무리한다." ],
+    tip: "정통 방식과 달리 생크림이 소스를 안정시켜 실패가 적다. 달걀노른자는 불을 끈 뒤 넣어야 익지 않고 부드럽게 어우러진다.",
+    tags: ["크림", "달걀", "부드러움"] },
+
+  { id: "pomodoro", name: "포모도로", nameIt: "Pomodoro", type: "토마토", noodle: "스파게티", difficulty: "쉬움", time: 25, servings: 2,
+    summary: "잘 익은 토마토와 바질, 마늘만으로 끓여낸 가장 순수한 토마토 파스타.",
+    ingredients: [
+      { name: "스파게티", amount: "180g" }, { name: "홀토마토 캔", amount: "1캔 (400g)" }, { name: "마늘", amount: "2쪽 (으깨기)" },
+      { name: "올리브유", amount: "3큰술" }, { name: "바질", amount: "잎 6~8장" }, { name: "소금·설탕", amount: "약간씩" } ],
+    steps: [
+      "팬에 올리브유와 으깬 마늘을 넣고 약불에서 향을 낸다.",
+      "홀토마토를 손으로 으깨 넣고 소금, 설탕을 약간 넣어 중약불에서 15분간 졸인다.",
+      "바질 잎 절반을 넣고 향을 더한다.",
+      "알덴테로 삶은 면을 소스에 넣고 면수로 농도를 맞추며 버무린다.",
+      "남은 바질과 올리브유 한 바퀴로 마무리한다." ],
+    tip: "설탕 약간이 토마토의 신맛을 잡아 준다. 토마토는 충분히 졸여야 단맛이 올라온다.",
+    tags: ["토마토", "비건 가능", "기본"] },
+
+  { id: "bolognese", name: "볼로네제", nameIt: "Ragù alla Bolognese", type: "토마토", noodle: "탈리아텔레", difficulty: "어려움", time: 120, servings: 4,
+    summary: "다진 고기와 채소를 오래 끓여 만드는 진한 볼로냐식 미트 라구.",
+    ingredients: [
+      { name: "탈리아텔레 (또는 페투치네)", amount: "320g" }, { name: "다진 소고기·돼지고기", amount: "400g" }, { name: "양파·당근·셀러리", amount: "각 1/2개씩 (잘게)" },
+      { name: "홀토마토", amount: "1캔 (400g)" }, { name: "레드와인", amount: "100ml" }, { name: "우유", amount: "100ml" }, { name: "올리브유·소금·후추", amount: "적당량" } ],
+    steps: [
+      "양파·당근·셀러리를 올리브유에 약불로 10분간 충분히 볶는다 (소프리토).",
+      "다진 고기를 넣고 센 불에서 수분을 날리며 갈색이 돌 때까지 볶는다.",
+      "레드와인을 붓고 알코올을 날린 뒤 우유를 넣어 졸인다.",
+      "홀토마토를 으깨 넣고 약불에서 최소 1시간 30분 이상 뭉근히 끓인다.",
+      "삶은 탈리아텔레를 라구에 넣고 버무려 면에 소스를 입힌다." ],
+    tip: "넓적한 면이어야 묵직한 라구가 잘 붙는다. 시간이 곧 맛이니 절대 서두르지 말 것.",
+    tags: ["고기", "오래끓이기", "주말요리"] },
+
+  { id: "pesto-genovese", name: "페스토 제노베제", nameIt: "Pesto alla Genovese", type: "페스토", noodle: "트로피에", difficulty: "쉬움", time: 15, servings: 2,
+    summary: "바질·잣·치즈를 갈아 만든 생바질 페스토. 불에 익히지 않아 향이 살아 있다.",
+    ingredients: [
+      { name: "트로피에 (또는 푸실리·링귀네)", amount: "180g" }, { name: "바질 잎", amount: "50g" }, { name: "잣", amount: "30g" },
+      { name: "마늘", amount: "1쪽" }, { name: "파르미지아노", amount: "40g" }, { name: "엑스트라버진 올리브유", amount: "80ml" }, { name: "소금", amount: "약간" } ],
+    steps: [
+      "바질, 잣, 마늘, 소금을 절구나 믹서에 넣고 간다 (열이 오르지 않게 짧게).",
+      "치즈를 넣고 올리브유를 조금씩 더하며 부드러운 페스토로 만든다.",
+      "면을 알덴테로 삶고 면수 약간을 남긴다.",
+      "불을 끈 상태에서 면과 페스토를 버무리고 면수로 농도를 맞춘다." ],
+    tip: "페스토는 절대 끓이지 않는다. 잔열로만 버무려야 선명한 초록빛과 향이 유지된다.",
+    tags: ["페스토", "생소스", "빠른요리"] },
+
+  { id: "cacio-e-pepe", name: "카치오 에 페페", nameIt: "Cacio e Pepe", type: "크림", noodle: "스파게티", difficulty: "보통", time: 15, servings: 1,
+    summary: "페코리노 치즈와 후추, 면수만으로 만드는 로마의 세 가지 재료 파스타.",
+    ingredients: [
+      { name: "스파게티 (또는 토나렐리)", amount: "100g" }, { name: "페코리노 로마노", amount: "60g (곱게 강판)" },
+      { name: "통후추", amount: "1작은술 (굵게 빻기)" }, { name: "면 삶은 물", amount: "적당량" } ],
+    steps: [
+      "빻은 통후추를 마른 팬에 살짝 볶아 향을 낸다.",
+      "면을 평소보다 적은 물에 삶아 전분이 진한 면수를 만든다.",
+      "볼에 페코리노와 미지근한 면수 조금을 넣고 크림 상태가 되도록 갠다.",
+      "후추 팬에 면수를 조금 넣고 면을 옮긴 뒤 불을 끈다.",
+      "치즈 크림을 부어 빠르게 버무린다. 뭉치면 면수로 풀어 준다." ],
+    tip: "치즈에 뜨거운 물을 바로 부으면 덩어리진다. 면수는 미지근하게, 치즈는 곱게 가는 것이 핵심.",
+    tags: ["로마식", "치즈", "재료3개"] },
+
+  { id: "arrabbiata", name: "아라비아타", nameIt: "Penne all'Arrabbiata", type: "토마토", noodle: "펜네", difficulty: "쉬움", time: 20, servings: 2,
+    summary: "매콤한 고추를 더한 화끈한 토마토 소스. 펜네 사이사이 소스가 잘 밴다.",
+    ingredients: [
+      { name: "펜네", amount: "180g" }, { name: "홀토마토", amount: "1캔 (400g)" }, { name: "마늘", amount: "3쪽 (편썰기)" },
+      { name: "페페론치노", amount: "3~4개" }, { name: "올리브유", amount: "3큰술" }, { name: "파슬리·소금", amount: "약간" } ],
+    steps: [
+      "올리브유에 마늘과 페페론치노를 넣고 약불에서 향과 매운맛을 우린다.",
+      "홀토마토를 으깨 넣고 소금 간을 한 뒤 10~12분 졸인다.",
+      "펜네를 알덴테로 삶아 소스에 넣고 면수로 농도를 맞춘다.",
+      "파슬리를 뿌려 마무리한다." ],
+    tip: "매운맛은 페페론치노 양으로 조절. 'arrabbiata'는 이탈리아어로 '화난'이라는 뜻이다.",
+    tags: ["매움", "토마토", "비건 가능"] },
+
+  { id: "vongole", name: "봉골레", nameIt: "Spaghetti alle Vongole", type: "오일", noodle: "링귀네", difficulty: "보통", time: 25, servings: 2,
+    summary: "바지락을 화이트와인에 쪄 그 국물로 면을 익히는 바다 향 가득한 오일 파스타.",
+    ingredients: [
+      { name: "링귀네 (또는 스파게티)", amount: "180g" }, { name: "바지락", amount: "400g (해감)" }, { name: "마늘", amount: "3쪽 (편썰기)" },
+      { name: "화이트와인", amount: "60ml" }, { name: "올리브유", amount: "4큰술" }, { name: "페페론치노·파슬리", amount: "약간" } ],
+    steps: [
+      "바지락은 소금물에 담가 충분히 해감한다.",
+      "올리브유에 마늘·페페론치노를 약불로 볶아 향을 낸다.",
+      "바지락과 화이트와인을 넣고 뚜껑을 덮어 입이 벌어질 때까지 찐다.",
+      "조개 국물에 살짝 덜 삶은 면을 넣고 1~2분 더 익혀 국물을 흡수시킨다.",
+      "파슬리와 올리브유로 마무리한다." ],
+    tip: "해감이 덜 되면 모래가 씹힌다. 면을 조개 국물에서 마저 익혀야 감칠맛이 면에 밴다.",
+    tags: ["해산물", "와인", "오일"] },
+
+  { id: "alfredo", name: "페투치네 알프레도", nameIt: "Fettuccine Alfredo", type: "크림", noodle: "페투치네", difficulty: "쉬움", time: 20, servings: 2,
+    summary: "버터와 파르미지아노가 면수와 유화되어 만들어지는 진하고 부드러운 크림 파스타.",
+    ingredients: [
+      { name: "페투치네", amount: "180g" }, { name: "버터", amount: "60g" }, { name: "파르미지아노", amount: "70g (강판)" },
+      { name: "면 삶은 물", amount: "적당량" }, { name: "후추", amount: "약간" } ],
+    steps: [
+      "페투치네를 소금물에 알덴테로 삶고 진한 면수를 남긴다.",
+      "팬에 버터를 약불로 녹이고 면수 한 국자를 넣어 섞는다.",
+      "삶은 면을 넣고 불을 끈 뒤 치즈를 조금씩 넣으며 빠르게 버무린다.",
+      "면수로 크리미한 농도를 맞추고 후추를 갈아 마무리한다." ],
+    tip: "정통 알프레도는 생크림을 쓰지 않는다. 버터·치즈·면수의 유화만으로 크림 질감을 낸다.",
+    tags: ["크림", "치즈", "빠른요리"] },
+
+  { id: "amatriciana", name: "아마트리치아나", nameIt: "Bucatini all'Amatriciana", type: "토마토", noodle: "부카티니", difficulty: "보통", time: 30, servings: 2,
+    summary: "관찰레와 토마토, 페코리노가 어우러진 로마 라치오 지방의 대표 토마토 파스타.",
+    ingredients: [
+      { name: "부카티니 (또는 스파게티)", amount: "180g" }, { name: "관찰레", amount: "80g" }, { name: "홀토마토", amount: "1캔 (400g)" },
+      { name: "페코리노 로마노", amount: "40g" }, { name: "페페론치노", amount: "1~2개" }, { name: "화이트와인", amount: "40ml (선택)" } ],
+    steps: [
+      "관찰레를 막대 모양으로 썰어 약불에 바삭하게 굽고 기름은 남긴다.",
+      "(선택) 화이트와인을 넣어 향을 살린 뒤 페페론치노를 더한다.",
+      "홀토마토를 으깨 넣고 10분간 졸인다.",
+      "삶은 면을 소스에 넣어 버무리고 불을 끈 뒤 페코리노를 뿌려 섞는다." ],
+    tip: "관찰레의 기름이 소스의 베이스. 베이컨으로 대체할 수 있지만 풍미는 관찰레가 압도적이다.",
+    tags: ["로마식", "토마토", "관찰레"] },
+];
+
+// ===== 상태 =====
+const state = { type: null, noodle: null, q: "" };
+const $ = (sel) => document.querySelector(sel);
+const grid = $("#recipe-grid"), emptyState = $("#empty-state"), resultCount = $("#result-count");
+
+// 면 종류별 손그림 아이콘 (시그니처)
+const noodleIcon = (noodle) => {
+  const s = 'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"';
+  const shapes = {
+    스파게티: `<line x1="5" y1="3" x2="5" y2="15" ${s}/><line x1="9" y1="3" x2="9" y2="15" ${s}/><line x1="13" y1="3" x2="13" y2="15" ${s}/>`,
+    링귀네: `<path d="M5 3 v12 M9 3 v12 M13 3 v12" ${s} stroke-width="2.4"/>`,
+    페투치네: `<rect x="4" y="3" width="2.5" height="12" ${s}/><rect x="8" y="3" width="2.5" height="12" ${s}/><rect x="12" y="3" width="2.5" height="12" ${s}/>`,
+    탈리아텔레: `<path d="M4 4 q2 3 0 6 q-2 3 0 5 M9 4 q2 3 0 6 q-2 3 0 5 M14 4 q2 3 0 6 q-2 3 0 5" ${s}/>`,
+    펜네: `<path d="M5 13 L8 4 L14 6 L11 15 Z" ${s}/>`,
+    부카티니: `<line x1="6" y1="3" x2="6" y2="15" ${s} stroke-width="3"/><line x1="11" y1="3" x2="11" y2="15" ${s} stroke-width="3"/>`,
+    트로피에: `<path d="M5 12 q3 -8 6 -4 q3 4 0 6" ${s}/>`,
+  };
+  return `<svg class="chip-icon" viewBox="0 0 18 18" aria-hidden="true">${shapes[noodle] || `<circle cx="9" cy="9" r="5" ${s}/>`}</svg>`;
+};
+
+// 검색·필터 (서버 대신 메모리에서 직접)
+function filterRecipes() {
+  let r = RECIPES;
+  if (state.type) r = r.filter((x) => x.type === state.type);
+  if (state.noodle) r = r.filter((x) => x.noodle === state.noodle);
+  if (state.q) {
+    const term = state.q.trim().toLowerCase();
+    r = r.filter((x) => [x.name, x.nameIt, x.type, x.noodle, x.summary, ...(x.tags || []), ...x.ingredients.map((i) => i.name)]
+      .join(" ").toLowerCase().includes(term));
+  }
+  return r;
+}
+
+function renderChips(containerId, key, values) {
+  const c = $(containerId);
+  c.innerHTML = "";
+  values.forEach((value) => {
+    const btn = document.createElement("button");
+    btn.className = "chip";
+    btn.dataset.value = value;
+    btn.innerHTML = key === "noodle" ? noodleIcon(value) + `<span>${value}</span>` : `<span>${value}</span>`;
+    btn.addEventListener("click", () => {
+      state[key] = state[key] === value ? null : value; // 토글
+      syncChips(containerId, key);
+      render();
+    });
+    c.appendChild(btn);
+  });
+}
+function syncChips(containerId, key) {
+  $(containerId).querySelectorAll(".chip").forEach((c) => c.classList.toggle("active", c.dataset.value === state[key]));
+}
+
+function render() {
+  const list = filterRecipes();
+  emptyState.hidden = list.length > 0;
+  resultCount.innerHTML = `총 <b>${list.length}</b>개의 레시피`;
+  grid.innerHTML = list.map((r) => `
+    <button class="card" data-id="${r.id}">
+      <span class="badge">${r.type}</span>
+      <div class="card-it">${r.nameIt}</div>
+      <div class="card-name">${r.name}</div>
+      <p class="card-summary">${r.summary}</p>
+      <div class="card-meta"><span>🍝 ${r.noodle}</span><span>⏱ ${r.time}분</span><span>📊 ${r.difficulty}</span></div>
+    </button>`).join("");
+  grid.querySelectorAll(".card").forEach((card) => card.addEventListener("click", () => openRecipe(card.dataset.id)));
+}
+
+function openRecipe(id) {
+  const r = RECIPES.find((x) => x.id === id);
+  if (!r) return;
+  $("#modal-body").innerHTML = `
+    <div class="modal-it">${r.nameIt}</div>
+    <h2 class="modal-title" id="modal-title">${r.name}</h2>
+    <p class="modal-summary">${r.summary}</p>
+    <div class="modal-meta">
+      <span class="meta-pill">${r.type}</span><span class="meta-pill">🍝 ${r.noodle}</span>
+      <span class="meta-pill">⏱ ${r.time}분</span><span class="meta-pill">📊 ${r.difficulty}</span>
+      <span class="meta-pill">👥 ${r.servings}인분</span>
+    </div>
+    <h3 class="section-head">재료</h3>
+    <ul class="ingredients">${r.ingredients.map((i) => `<li><span>${i.name}</span><span class="amount">${i.amount}</span></li>`).join("")}</ul>
+    <h3 class="section-head">만드는 순서</h3>
+    <ol class="steps">${r.steps.map((s) => `<li>${s}</li>`).join("")}</ol>
+    <div class="tip"><b>핵심 팁 ·</b> ${r.tip}</div>`;
+  $("#modal").hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeModal() { $("#modal").hidden = true; document.body.style.overflow = ""; }
+
+// 검색 입력 (디바운스)
+let timer;
+$("#search").addEventListener("input", (e) => {
+  const v = e.target.value;
+  $("#clear-search").hidden = v.length === 0;
+  clearTimeout(timer);
+  timer = setTimeout(() => { state.q = v; render(); }, 200);
+});
+$("#clear-search").addEventListener("click", () => {
+  $("#search").value = ""; $("#clear-search").hidden = true; state.q = ""; render();
+});
+
+document.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", closeModal));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#modal").hidden) closeModal(); });
+
+// 초기화 (데이터에서 종류·면 목록을 자동 추출)
+renderChips("#type-filters", "type", [...new Set(RECIPES.map((r) => r.type))]);
+renderChips("#noodle-filters", "noodle", [...new Set(RECIPES.map((r) => r.noodle))]);
+render();
+</script>
+</body>
+</html>
