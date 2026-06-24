@@ -1,11 +1,11 @@
-# 🍝 오늘의 파스타 (Pasta Recipes) — 단일 HTML 버전
+# 🍝 오늘의 파스타 (Pasta CookBook) — 단일 HTML 버전
 
 파스타 **소스 종류**와 **면 종류**로 골라 보고, 재료·이름·태그로 **검색**할 수 있는 레시피 토이 프로젝트입니다.
-이 버전은 **파일 하나(`pasta-recipes.html`)로 끝**입니다. 설치도, 서버 실행도 필요 없습니다.
+이 버전은 **파일 하나(`Pasta-CookBook.html`)로 끝**입니다. 설치도, 서버 실행도 필요 없습니다.
 
 ## 실행 방법
 
-`pasta-recipes.html` 파일을 더블클릭하면 브라우저에서 바로 열립니다.
+`Pasta-CookBook.html` 파일을 더블클릭하면 브라우저에서 바로 열립니다.
 
 - 별도 설치(npm 등) 불필요
 - 서버 실행 불필요
@@ -39,13 +39,13 @@
 
 서버 없이도 웹에 띄울 수 있습니다.
 
-1. `pasta-recipes.html`을 `index.html`로 이름을 바꿔 저장소에 올린다.
+1. `Pasta-CookBook.html`을 `index.html`로 이름을 바꿔 저장소에 올린다.
 2. 저장소 **Settings → Pages**에서 브랜치를 `main`으로 지정하고 저장.
 3. 잠시 뒤 생성되는 주소로 접속.
 
 ## 레시피 추가·수정하기
 
-`pasta-recipes.html`을 텍스트 편집기로 열어 `const RECIPES = [ ... ]` 배열에 객체를 추가하면 됩니다.
+`Pasta-CookBook.html`을 텍스트 편집기로 열어 `const RECIPES = [ ... ]` 배열에 객체를 추가하면 됩니다.
 소스·면 목록은 데이터에서 자동 추출되므로, 새 종류를 넣어도 필터 칩에 알아서 반영됩니다.
 
 ```js
